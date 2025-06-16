@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - ShopEase</title>
+    <link rel="stylesheet" href="static/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        .dashboard-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .dashboard-card h3 {
+            margin-bottom: 1rem;
+            color: #333;
+        }
+        .user-info {
+            margin-bottom: 1rem;
+        }
+        .user-info p {
+            margin: 0.5rem 0;
+            color: #666;
+        }
+        .user-info strong {
+            color: #333;
+        }
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+        }
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+        .btn:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="logo">ShopEase</div>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="shop.html">Shop</a></li>
+            <li><a href="dashboard.html" class="active">Dashboard</a></li>
+        </ul>
+        <div class="nav-buttons">
+            <button id="logoutBtn" class="login-btn">Logout</button>
+        </div>
+    </nav>
+
+    <!-- Dashboard Section -->
+    <section class="dashboard-container">
+        <div class="dashboard-header">
+            <h1>Welcome to Your Dashboard</h1>
+        </div>
+        
+        <div class="dashboard-grid">
+            <!-- Profile Information -->
+            <div class="dashboard-card">
+                <h3><i class="fas fa-user"></i> Profile Information</h3>
+                <div class="user-info" id="profileInfo">
+                    <p><strong>Username:</strong> <span id="username">Loading...</span></p>
+                    <p><strong>Email:</strong> <span id="email">Loading...</span></p>
+                    <p><strong>Name:</strong> <span id="fullName">Loading...</span></p>
+                    <p><strong>Phone:</strong> <span id="phone">Loading...</span></p>
+                </div>
+                <div class="action-buttons">
+                    <button class="btn btn-primary" onclick="editProfile()">Edit Profile</button>
+                </div>
+            </div>
+
+            <!-- Address Information -->
+            <div class="dashboard-card">
+                <h3><i class="fas fa-map-marker-alt"></i> Address Information</h3>
+                <div class="user-info" id="addressInfo">
+                    <p><strong>Address:</strong> <span id="address">Loading...</span></p>
+                    <p><strong>City:</strong> <span id="city">Loading...</span></p>
+                    <p><strong>State:</strong> <span id="state">Loading...</span></p>
+                    <p><strong>Country:</strong> <span id="country">Loading...</span></p>
+                </div>
+                <div class="action-buttons">
+                    <button class="btn btn-primary" onclick="editAddress()">Edit Address</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Check if user is logged in
+        function checkAuth() {
+            const userId = localStorage.getItem('userId');
+            if (!userId) {
+                window.location.href = '/login.html';
+            }
+            return userId;
+        }
+
+        // Load user data
+        async function loadUserData() {
+            const userId = checkAuth();
+            try {
+                const response = await fetch(`/profile?user_id=${userId}`);
+                if (!response.ok) {
+                    throw new Error('Failed to load user data');
+                }
+                const userData = await response.json();
+                
+                // Update profile information
+                document.getElementById('username').textContent = userData.username;
+                document.getElementById('email').textContent = userData.email;
+                document.getElementById('fullName').textContent = 
+                    `${userData.details?.first_name || ''} ${userData.details?.last_name || ''}`.trim() || 'Not set';
+                document.getElementById('phone').textContent = userData.details?.phone || 'Not set';
+                
+                // Update address information
+                document.getElementById('address').textContent = userData.details?.address || 'Not set';
+                document.getElementById('city').textContent = userData.details?.city || 'Not set';
+                document.getElementById('state').textContent = userData.details?.state || 'Not set';
+                document.getElementById('country').textContent = userData.details?.country || 'Not set';
+            } catch (error) {
+                showNotification(error.message, 'error');
+            }
+        }
+
+        // Edit profile
+        function editProfile() {
+            window.location.href = '/profile.html';
+        }
+
+        // Edit address
+        function editAddress() {
+            window.location.href = '/profile.html';
+        }
+
+        // Logout
+        document.getElementById('logoutBtn').addEventListener('click', function() {
+            localStorage.removeItem('userId');
+            window.location.href = '/login.html';
+        });
+
+        // Show notification
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            setTimeout(() => notification.remove(), 3000);
+        }
+
+        // Load user data when page loads
+        document.addEventListener('DOMContentLoaded', loadUserData);
+    </script>
+</body>
+</html> 
