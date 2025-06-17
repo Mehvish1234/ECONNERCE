@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 import pymysql
+import os
 
 # Replace MySQLdb with PyMySQL
 pymysql.install_as_MySQLdb()
@@ -9,7 +10,9 @@ pymysql.install_as_MySQLdb()
 app = Flask(__name__)
 
 # Database Configuration
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:%40MEH2004meh@localhost/ecommerce_db'
+
+db_path = os.path.join('/tmp', 'ecom.db')
+app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{db_path}'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Initialize SQLAlchemy
