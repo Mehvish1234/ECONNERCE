@@ -6,22 +6,16 @@ import pymysql
 # Replace MySQLdb with PyMySQL
 pymysql.install_as_MySQLdb()
 
-app = Flask(__name__)
+app = Flask(_name_)
 
-# -----------------------------
 # Database Configuration
-# -----------------------------
-# Note: Store sensitive credentials in environment variables for production
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:%40MEH2004meh@localhost/ecommerce_db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
 
 # Initialize SQLAlchemy
 db = SQLAlchemy(app)
 
-# -----------------------------
 # Models
-# -----------------------------
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
@@ -62,9 +56,7 @@ class OrderItem(db.Model):
     quantity = db.Column(db.Integer, nullable=False)
     price = db.Column(db.Float, nullable=False)
 
-# -----------------------------
 # Routes
-# -----------------------------
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -77,28 +69,24 @@ def shop():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        # TODO: Add actual login logic
+        # Handle login form submission here
         return redirect(url_for('index'))
     return render_template('login.html')
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
-        # TODO: Add actual signup logic
+        # Handle signup form submission here
         return redirect(url_for('login'))
     return render_template('signup.html')
 
-# -----------------------------
-# Database Initialization
-# -----------------------------
+# Database initialization function
 def init_db():
     with app.app_context():
+        # Create all tables
         db.create_all()
-        print("✅ Database tables created successfully!")
+        print("Database tables created successfully!")
 
-# -----------------------------
-# Main Execution
-# -----------------------------
-if __name__ == '__main__':
-    init_db()  # Call only once or control with a flag in production
-    app.run(debug=True)  # Set to False when deploying live
+if _name_ == '_main_':
+    init_db()  # Initialize the database
+    app.run(debug=True)
