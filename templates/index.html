@@ -12,14 +12,14 @@
     <nav class="navbar">
         <div class="logo">ShopEase</div>
         <ul class="nav-links">
-            <li><a href="index.html">Home</a></li>
-            <li><a href="#features">Features</a></li>
-            <li><a href="shop.html">Products</a></li>
-            <li><a href="#contact">Contact</a></li>
+          <li><a href="{{ url_for('home') }}">Home</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="{{ url_for('shop') }}">Products</a></li>
+                <li><a href="#contact">Contact</a></li>
         </ul>
         <div class="nav-buttons">
-            <a href="login.html" class="login-btn">Login</a>
-            <a href="signup.html" class="signup-btn">Sign Up</a>
+           <a href="{{ url_for('login') }}" class="login-btn">Login</a>
+           <a href="{{ url_for('signup') }}" class="signup-btn">Sign Up</a>
         </div>
     </nav>
 
@@ -29,8 +29,8 @@
             <h1>Welcome to ShopEase</h1>
             <p>Discover amazing products at unbeatable prices</p>
             <div class="cta-buttons">
-                <a href="shop.html" class="primary-btn">Shop Now</a>
-                <a href="#features" class="secondary-btn">Learn More</a>
+              <a href="{{ url_for('shop') }}" class="primary-btn">Shop Now</a>
+              <a href="#features" class="secondary-btn">Learn More</a>
             </div>
         </div>
     </section>
