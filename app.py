@@ -6,7 +6,7 @@ import pymysql
 # Replace MySQLdb with PyMySQL
 pymysql.install_as_MySQLdb()
 
-app = Flask(_name_)
+app = Flask(__name__)
 
 # Database Configuration
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:%40MEH2004meh@localhost/ecommerce_db'
@@ -87,6 +87,7 @@ def init_db():
         db.create_all()
         print("Database tables created successfully!")
 
-if _name_ == '_main_':
+if __name__ == '__main__':
     init_db()  # Initialize the database
     app.run(debug=True)
+
