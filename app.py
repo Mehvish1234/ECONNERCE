@@ -10,13 +10,16 @@ pymysql.install_as_MySQLdb()
 app = Flask(__name__)
 
 # Database Configuration
-
 db_path = os.path.join('/tmp', 'ecom.db')
 app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{db_path}'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Initialize SQLAlchemy
 db = SQLAlchemy(app)
+
+# ✅ Create tables automatically on startup
+with app.app_context():
+    db.create_all()
 
 # Models
 class User(db.Model):
@@ -83,14 +86,5 @@ def signup():
         return redirect(url_for('login'))
     return render_template('signup.html')
 
-# Database initialization function
-def init_db():
-    with app.app_context():
-        # Create all tables
-        db.create_all()
-        print("Database tables created successfully!")
-
 if __name__ == '__main__':
-    init_db()  # Initialize the database
     app.run(debug=True)
-
